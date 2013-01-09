@@ -33,20 +33,31 @@ public class EditCommand implements CLICommand {
 		out.println("[7]" + "備考");
 		out.println("[8]" + "キーワード");
 		out.println("[9]" + "登録者");
+		out.println("[0]" + "(操作の中断)");
 		// information to edit
 		int type;
 		while (true) {
+			out.print(": ");
 			try {
-				out.print(": ");
 				type = Integer.parseInt(in.readLine());
 				if (type >= 1 && type <= 9) break;
-				else out.println("正しい情報を入力してください。");
+				else if (type == 0) {
+					out.println("キャンセルされました。");
+					return;
+				} else {
+					out.println("正しい情報を入力してください。");
+				}
 			} catch (NumberFormatException e) {
 				out.println("正しい情報を入力してください。");
 			}
 		}
-		out.println("どのように編集するか入力してください:");
+		out.println("どのように編集するか入力してください: ");
+		out.println("(「exit」で中断します)");
 		String value = in.readLine();
+		if (value.equals("exit")) {
+			out.println("キャンセルされました。");
+			return;
+		}
 		switch (type) {
 		case 1:
 			bookToEdit.setTitle(value);
@@ -79,14 +90,6 @@ public class EditCommand implements CLICommand {
 		String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		bookToEdit.setDataCreatedDate(now);
 		new BookWriter(out, "+ ").write(bookToEdit);
-		out.print("この内容で登録しますか? (y/n)[y] : ");
-		out.flush();
-		if (! "y".equals(in.readLine())) {
-			out.println("キャンセルされました。");
-			return;
-		}
-		catalog.deleteBook(bookToEdit.getBookId());
-		catalog.addBook(bookToEdit);
-		out.println("登録されました。");
+		out.println("この内容で登録されました。");
 	}
 }
