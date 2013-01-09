@@ -32,7 +32,7 @@ public class LendCommand implements CLICommand {
 			out.println("キャンセルされました。");
 			return;
 		}
-		bookToLend.setStatus(true);
+		catalog.flipBookStatus(bookToLend);
 		out.println("貸し出しが完了しました。");
 	}
 

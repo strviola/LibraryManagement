@@ -3,8 +3,6 @@ package jp.bcat;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class EditCommand implements CLICommand {
 	private BookCatalog catalog;
@@ -59,37 +57,7 @@ public class EditCommand implements CLICommand {
 			out.println("キャンセルされました。");
 			return;
 		}
-		switch (type) {
-		case 1:
-			bookToEdit.setTitle(value);
-			break;
-		case 2:
-			bookToEdit.setAuthor(value);
-			break;
-		case 3:
-			bookToEdit.setTranslator(value);
-			break;
-		case 4:
-			bookToEdit.setPublisher(value);
-			break;
-		case 5:
-			bookToEdit.setPublicationDate(value);
-			break;
-		case 6:
-			bookToEdit.setCode(value);
-			break;
-		case 7:
-			bookToEdit.setMemo(value);
-			break;
-		case 8:
-			bookToEdit.setKeyword(value);
-			break;
-		case 9:
-			bookToEdit.setDataCreator(value);
-			break;
-		}
-		String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		bookToEdit.setDataCreatedDate(now);
+		catalog.editBook(bookToEdit, type, value);
 		new BookWriter(out, "+ ").write(bookToEdit);
 		out.println("この内容で登録されました。");
 	}

@@ -15,13 +15,13 @@ public class ReturnCommand implements CLICommand {
 	public void process(BufferedReader in, PrintWriter out) throws IOException {
 		out.print("•Ô‹p‚µ‚½‚¢}‘ID: ");
 		out.flush();
-		Book bookToLend = catalog.getBook(in.readLine());
-		if (bookToLend == null) {
+		Book bookToReturn = catalog.getBook(in.readLine());
+		if (bookToReturn == null) {
 			out.println("ŠY“–‚·‚é}‘‚ª‚ ‚è‚Ü‚¹‚ñB");
 			return;
 		}
-		new BookWriter(out, "- ").write(bookToLend);
-		if (! bookToLend.getStatus()) {
+		new BookWriter(out, "- ").write(bookToReturn);
+		if (! bookToReturn.getStatus()) {
 			out.println("‚»‚Ì}‘‚Í‘İ‚µo‚µ’†‚Å‚Í‚ ‚è‚Ü‚¹‚ñB");
 			return;
 		}
@@ -31,7 +31,7 @@ public class ReturnCommand implements CLICommand {
 			out.println("ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚Ü‚µ‚½B");
 			return;
 		}
-		bookToLend.setStatus(false);
+		catalog.flipBookStatus(bookToReturn);
 		out.println("•Ô‹p‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
 	}
 
