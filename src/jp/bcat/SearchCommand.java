@@ -17,7 +17,7 @@ public class SearchCommand implements CLICommand {
 		out.flush();
 		Book[] result = catalog.searchBooks(in.readLine());	
 		if (result.length == 0) {
-			out.print("キーワードに一致する蔵書が見つかりませんでした。");
+			out.println("キーワードに一致する蔵書が見つかりませんでした。");
 		} else {
 			out.println("検索結果: " + result.length + "項目");
 			BookWriter writer = new BookWriter(out, " ");

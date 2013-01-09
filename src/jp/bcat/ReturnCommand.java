@@ -26,6 +26,7 @@ public class ReturnCommand implements CLICommand {
 			return;
 		}
 		out.print("この図書を返却します。よろしいですか? [y/n]");
+		out.flush();
 		if (! "y".equals(in.readLine())) {
 			out.println("キャンセルされました。");
 			return;

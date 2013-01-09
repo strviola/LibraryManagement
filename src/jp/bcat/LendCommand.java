@@ -26,7 +26,8 @@ public class LendCommand implements CLICommand {
 			out.println("その図書は貸し出し中です。");
 			return;
 		}
-		out.print("この図書を貸し出します。よろしいですか? [y/n]");
+		out.print("この図書を貸し出します。よろしいですか? [y/n]: ");
+		out.flush();
 		if (! "y".equals(in.readLine())) {
 			out.println("キャンセルされました。");
 			return;

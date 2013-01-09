@@ -23,7 +23,7 @@ public class EditCommand implements CLICommand {
 			return;
 		}
 		new BookWriter(out, "- ").write(bookToEdit);
-		out.println("どの情報を編集するか選択してください: ");
+		out.println("どの情報を編集するか選択してください。");
 		out.println("[1]" + "タイトル");
 		out.println("[2]" + "著者");
 		out.println("[3]" + "訳者");
@@ -38,6 +38,7 @@ public class EditCommand implements CLICommand {
 		int type;
 		while (true) {
 			out.print(": ");
+			out.flush();
 			try {
 				type = Integer.parseInt(in.readLine());
 				if (type >= 1 && type <= 9) break;
