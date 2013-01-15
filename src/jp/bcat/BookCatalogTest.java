@@ -1,11 +1,13 @@
 package jp.bcat;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+import junit.framework.TestCase;
 
-public class BookCatalogTest {
-	Book createBook() {
+public class BookCatalogTest extends TestCase {
+	private BookCatalog testCatalog;
+	private String bid;
+	
+ 	private Book createBook() {
 		Book testData = new Book();
 		testData.setTitle("Java本");
 		testData.setAuthor("Foo J. Bar");
@@ -20,7 +22,6 @@ public class BookCatalogTest {
 		return testData;
 	}
 
-	// Helping function. Not "@Test".
 	void assertBookEquals(Book book1, Book book2) {
 		assertEquals(book1.getBookId(), book2.getBookId());
 		assertEquals(book1.getTitle(), book2.getTitle());
@@ -35,34 +36,41 @@ public class BookCatalogTest {
 		assertEquals(book1.getDataCreatedDate(), book2.getDataCreatedDate());
 	}
 
+	@Override
+	protected void setUp() {
+		// Testの直前にこのメソッドが呼ばれる
+		testCatalog = new BookCatalog();
+		Book testBook = createBook();
+		testCatalog.addBook(testBook);
+		bid = testBook.getBookId();
+	}
+	
+	@Override
+	protected void tearDown() {
+		// Testの終了後にこのメソッドが呼ばれる
+		testCatalog.deleteBook(bid);
+	}
+	
 	@Test
 	public void testAddGetAndDelete() {
-		BookCatalog catalog = new BookCatalog();
 		// テストデータの作成
 		Book testData1 = createBook();
-		Book testData2 = createBook();
 		// addBookのテスト
-		Book created1 = catalog.addBook(testData1);
-		Book created2 = catalog.addBook(testData2);
+		Book created1 = testCatalog.addBook(testData1);
 		assertNotNull(created1);
-		assertNotNull(created2);
 		String bookId1 = created1.getBookId();
-		String bookId2 = created2.getBookId();
 		assertNotNull(bookId1);
-		assertFalse(bookId1.equals(bookId2));
 		// getBookのテスト
-		Book book = catalog.getBook(bookId1);
+		Book book = testCatalog.getBook(bookId1);
 		assertNotNull(book);
 		assertBookEquals(book, created1);
 		// getBooksのテスト
-		Book [] books = catalog.getBooks();
+		Book [] books = testCatalog.getBooks();
 		assertNotNull(books);
 		assertTrue(books.length >= 2);
 		// deleteBookのテスト
-		catalog.deleteBook(bookId1);
-		assertNull(catalog.getBook(bookId1));
-		catalog.deleteBook(bookId2);
-		assertNull(catalog.getBook(bookId2));
+		testCatalog.deleteBook(bookId1);
+		assertNull(testCatalog.getBook(bookId1));
 	}
 
 	@Test
@@ -74,6 +82,7 @@ public class BookCatalogTest {
 		Book created = catalog.addBook(testData);
 		assertNotNull(created);
 		String bookId = created.getBookId();
+		System.out.println(bookId);
 		assertNotNull(bookId);
 		// loadのテスト
 		catalog = new BookCatalog();
@@ -82,5 +91,13 @@ public class BookCatalogTest {
 		assertBookEquals(created, reloaded);
 		// テストデータの消去
 		catalog.deleteBook(bookId);
+	}
+	
+	@Test
+	public void testSearchBook() {
+		Book[] searchResult = testCatalog.searchBooks("言語太郎");
+		assertEquals(1, searchResult.length);
+		Book bookToCompare = testCatalog.getBook(bid);
+		assertBookEquals(bookToCompare, searchResult[0]);
 	}
 }
