@@ -100,4 +100,26 @@ public class BookCatalogTest extends TestCase {
 		Book bookToCompare = testCatalog.getBook(bid);
 		assertBookEquals(bookToCompare, searchResult[0]);
 	}
+	
+	@Test
+	public void testEditBook() {
+		Book bookToEdit = testCatalog.getBook(bid);
+		String beforeTitle = bookToEdit.getTitle();
+		testCatalog.editBook(bookToEdit, 1, "Java“ü–å");
+		String afterTitle = testCatalog.getBook(bid).getTitle();
+		assertNotSame(beforeTitle, afterTitle);
+	}
+	
+	@Test
+	public void testLendReturnBook() {
+		// initial
+		Book b = testCatalog.getBook(bid);
+		assertFalse(b.getStatus());
+		// lend
+		testCatalog.flipBookStatus(b);
+		assertTrue(b.getStatus());
+		// return
+		testCatalog.flipBookStatus(b);
+		assertFalse(b.getStatus());
+	}
 }
